@@ -29,7 +29,7 @@ module bit_flipper (
 );
 
     reg [2:0] state;
-    reg [1:0] jam_cnt;      // 妨害回数を数える
+    reg [2:0] jam_cnt;      // 妨害回数を数える
     reg [2:0] jam_time;     // 5クロック妨害
     reg [2:0] wait_time;    // 5クロック待機
     reg       dme_prev;
@@ -44,14 +44,15 @@ module bit_flipper (
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin // 非同期リセット
             state           <= IDLE;
-            jam_cnt         <= 1'b0;
+            jam_cnt         <= 3'b0;
             jam_time        <= 2'b0;
             wait_time       <= 2'b0;
             flipping_out    <= 1'b0;
+            dme_prev        <= dme_in;
         end else begin
             if(!enable)begin
                 state           <= IDLE;
-                jam_cnt         <= 1'b0;
+                jam_cnt         <= 3'b0;
                 jam_time        <= 2'b0;
                 wait_time       <= 2'b0;
                 flipping_out    <= 1'b0;
@@ -74,7 +75,7 @@ module bit_flipper (
 
                     PULSE: begin
                         if(jam_time == 3'd4) begin
-                            jam_cnt = jam_cnt + 3'd1;
+                            jam_cnt <= jam_cnt + 3'd1;
 
                             if(jam_cnt + 3'd1 == JAM_TOTAL)begin
                                 state <= FINISH;
@@ -99,8 +100,8 @@ module bit_flipper (
 
                 endcase
             end
+            dme_prev <= dme_in;
         end
-        dme_prev <= dme_in;
     end
 
 endmodule
