@@ -67,6 +67,7 @@ module jam_system (
     reg [1:0]  state;       // ステートマシンの現在の状態
     reg [12:0] counter;     // 汎用タイマーカウンタ (6400を数えるため13bit必要)
     reg        ssd_enable;  // 第2検知器の動作許可信号 (Enable)
+    reg        flip_enable;
     reg [9:0]  jam_counter; // 妨害した回数
 
     // =========================================================
@@ -126,6 +127,7 @@ module jam_system (
             jam_pin     <= 1'b0;
             jam_counter <= 10'd0;
             led_out     <= 1'b0;
+            flip_enable <= 1'b0;
         end else begin
             case (state)
                 // ------------------------------------------------
@@ -196,6 +198,7 @@ module jam_system (
                 // ST_OUTPUT: ビット反転させる
                 // ------------------------------------------------
                 ST_OUTPUT: begin
+                    flip_enable <= 1'b1;
                 // ST_OUTPUT: begin
                 //     jam_pin <= 1'b1; // 出力ピンをHighに
 
