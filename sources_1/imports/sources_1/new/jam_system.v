@@ -108,13 +108,13 @@ module jam_system (
         .tracking_active (w_is_tracking) // 同期ロック中信号
     );
 
-    bit_flipper u_flipper {
+    bit_flipper u_flipper (
         .clk(sys_clk),
         .rst_n(sys_rst_n),
         .dme_in(dme_rx_pin),
         .enable(flip_enable),
         .flipping_out(jam_pin)
-    };
+    );
 
     // =========================================================
     // 5. メインシーケンス制御ステートマシン
