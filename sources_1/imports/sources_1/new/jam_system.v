@@ -210,6 +210,7 @@ module jam_system (
                 //         counter <= counter + 1'b1;
                 //     end
                 // end
+                end
             endcase
         end
     end
