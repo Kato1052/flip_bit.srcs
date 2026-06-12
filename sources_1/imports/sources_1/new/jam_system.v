@@ -64,11 +64,13 @@ module jam_system (
     wire w_ssd_pulse;       // 第2検知器からのパルス (SSD検知 + 遅延後)
     wire w_is_tracking;     // 第2検知器が同期追跡中かどうかのフラグ
 
-    reg [1:0]  state;       // ステートマシンの現在の状態
-    reg [12:0] counter;     // 汎用タイマーカウンタ (6400を数えるため13bit必要)
-    reg        ssd_enable;  // 第2検知器の動作許可信号 (Enable)
-    reg        flip_enable;
-    reg [9:0]  jam_counter; // 妨害した回数
+    reg [1:0]   state;       // ステートマシンの現在の状態
+    reg [12:0]  counter;     // 汎用タイマーカウンタ (6400を数えるため13bit必要)
+    reg         ssd_enable;  // 第2検知器の動作許可信号 (Enable)
+    reg         flip_enable;
+    reg [9:0]   jam_counter; // 妨害した回数
+    reg         flip_disable;
+    reg         flip_out;
 
     // =========================================================
     // 4. サブモジュールの接続
