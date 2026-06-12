@@ -109,11 +109,12 @@ module jam_system (
     );
 
     bit_flipper u_flipper (
-        .clk(sys_clk),
-        .rst_n(sys_rst_n),
-        .dme_in(dme_rx_pin),
-        .enable(flip_enable),
-        .flipping_out(jam_pin)
+        .clk        (sys_clk),
+        .rst_n      (sys_rst_n),
+        .dme_in     (dme_rx_pin),
+        .enable     (flip_enable),
+        .flip_end   (flip_disable),
+        .flip_out   (jam_pin)
     );
 
     // =========================================================
@@ -121,13 +122,13 @@ module jam_system (
     // =========================================================
     always @(posedge sys_clk or negedge sys_rst_n) begin
         if (!sys_rst_n) begin
-            state       <= ST_IDLE;
-            counter     <= 13'd0;
-            ssd_enable  <= 1'b0;
-            jam_pin     <= 1'b0;
-            jam_counter <= 10'd0;
-            led_out     <= 1'b0;
-            flip_enable <= 1'b0;
+            state           <= ST_IDLE;
+            counter         <= 13'd0;
+            ssd_enable      <= 1'b0;
+            jam_pin         <= 1'b0;
+            jam_counter     <= 10'd0;
+            led_out         <= 1'b0;
+            flip_enable     <= 1'b0;
         end else begin
             case (state)
                 // ------------------------------------------------
@@ -199,17 +200,11 @@ module jam_system (
                 // ------------------------------------------------
                 ST_OUTPUT: begin
                     flip_enable <= 1'b1;
-                // ST_OUTPUT: begin
-                //     jam_pin <= 1'b1; // 出力ピンをHighに
 
-                //     if (counter == OUT_CYCLES - 1) begin
-                //         // 規定時間経過したら終了
-                //         state   <= ST_IDLE; // 最初に戻る
-                //         jam_pin <= 1'b0;    // 出力をLowに
-                //     end else begin
-                //         counter <= counter + 1'b1;
-                //     end
-                // end
+                    if(flip_disable)begin
+                        flip_enable <= 1'b0;
+                        state   <= ST_IDLE;
+                    end
                 end
             endcase
         end

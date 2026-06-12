@@ -25,7 +25,8 @@ module bit_flipper (
     input wire rst_n,
     input wire dme_in,
     input wire enable,
-    output reg flipping_out
+    output reg flip_end,
+    output reg flip_out
 );
 
     reg [2:0] state;
@@ -43,19 +44,21 @@ module bit_flipper (
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin // 非同期リセット
-            state           <= IDLE;
-            jam_cnt         <= 3'b0;
-            jam_time        <= 2'b0;
-            wait_time       <= 2'b0;
-            flipping_out    <= 1'b0;
-            dme_prev        <= dme_in;
+            state       <= IDLE;
+            jam_cnt     <= 3'b0;
+            jam_time    <= 2'b0;
+            wait_time   <= 2'b0;
+            flip_out    <= 1'b0;
+            flip_end    <= 1'b0;
+            dme_prev    <= dme_in;
         end else begin
             if(!enable)begin
-                state           <= IDLE;
-                jam_cnt         <= 3'b0;
-                jam_time        <= 2'b0;
-                wait_time       <= 2'b0;
-                flipping_out    <= 1'b0;
+                state       <= IDLE;
+                jam_cnt     <= 3'b0;
+                jam_time    <= 2'b0;
+                wait_time   <= 2'b0;
+                flip_out    <= 1'b0;
+                flip_end    <= 1'b0;
             end else begin
                 case(state)
                     IDLE: begin
@@ -67,7 +70,7 @@ module bit_flipper (
                     WAIT: begin
                         if(wait_time == 3'd4) begin
                             state <= PULSE;
-                            flipping_out <= 1'b1;
+                            flip_out <= 1'b1;
                         end else begin
                             wait_time <= wait_time + 3'd1;
                         end
@@ -82,12 +85,12 @@ module bit_flipper (
                                 jam_cnt         <= 1'b0;
                                 jam_time        <= 2'b0;
                                 wait_time       <= 2'b0;
-                                flipping_out    <= 1'b0;
+                                flip_out    <= 1'b0;
                             end else begin
                                 state <= IDLE;
                                 jam_time        <= 2'b0;
                                 wait_time       <= 2'b0;
-                                flipping_out    <= 1'b0;
+                                flip_out    <= 1'b0;
                             end
                         end else begin
                             jam_time <= jam_time + 3'd1;
@@ -95,7 +98,7 @@ module bit_flipper (
                     end
 
                     FINISH: begin
-                        ;
+                        flip_end    <= 1'b1;
                     end
 
                 endcase
