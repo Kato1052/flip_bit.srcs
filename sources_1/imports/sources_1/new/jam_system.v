@@ -21,11 +21,11 @@
 
 
 module jam_system (
-    input wire sys_clk,       // システムクロック (125MHz)
-    input wire sys_rst_n,     // リセット信号 (Active Low)
-    input wire dme_rx_pin,    // FPGA入力ピン: 差動マンチェスタ信号 (12.5MHz)
-    output reg jam_pin,       // FPGA出力ピン: ジャム信号出力 (640ビット長)
-    output reg led_out        // 1000回実行したら点灯
+    input wire  sys_clk,       // システムクロック (125MHz)
+    input wire  sys_rst_n,     // リセット信号 (Active Low)
+    input wire  dme_rx_pin,    // FPGA入力ピン: 差動マンチェスタ信号 (12.5MHz)
+    output wire jam_pin,       // FPGA出力ピン: ジャム信号出力 (640ビット長)
+    output reg  led_out        // 1000回実行したら点灯
 );
 
     // =========================================================
@@ -114,8 +114,10 @@ module jam_system (
         .dme_in     (dme_rx_pin),
         .enable     (flip_enable),
         .flip_end   (flip_disable),
-        .flip_out   (jam_pin)
+        .flip_out   (flip_out)
     );
+
+    assign jam_pin = flip_out;
 
     // =========================================================
     // 5. メインシーケンス制御ステートマシン
