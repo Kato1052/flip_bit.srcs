@@ -21,12 +21,12 @@
 
 
 module bit_flipper (
-    input wire  clk,
-    input wire  rst_n,
-    input wire  dme_in,
-    input wire  enable,
-    output reg  flip_end,
-    output wire flip_out
+    input wire clk,
+    input wire rst_n,
+    input wire dme_in,
+    input wire enable,
+    output reg flip_end,
+    output reg flip_out
 );
 
     reg [2:0] state;
