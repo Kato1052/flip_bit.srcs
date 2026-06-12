@@ -127,7 +127,7 @@ module jam_system (
             state           <= ST_IDLE;
             counter         <= 13'd0;
             ssd_enable      <= 1'b0;
-            jam_pin         <= 1'b0;
+            // jam_pin         <= 1'b0;
             jam_counter     <= 10'd0;
             led_out         <= 1'b0;
             flip_enable     <= 1'b0;
@@ -137,7 +137,7 @@ module jam_system (
                 // ST_IDLE: 最初のきっかけ待ち
                 // ------------------------------------------------
                 ST_IDLE: begin
-                    jam_pin    <= 1'b0; // 出力OFF
+                    // jam_pin    <= 1'b0; // 出力OFF
                     ssd_enable <= 1'b0; // 第2検知器OFF
 
                     // Beacon検知パルスが来たらシーケンス開始
