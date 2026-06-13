@@ -119,7 +119,7 @@ module jam_system (
         .flip_out   (flip_out)
     );
 
-    assign jam_pin = flip_out;
+    assign jam_pin = !flip_out;
 
     // =========================================================
     // 5. メインシーケンス制御ステートマシン
